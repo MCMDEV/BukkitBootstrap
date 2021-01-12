@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-package io.github.lxgaming.bukkitbootstrap;
+package de.mcmdev.spigotmixinbootstrap;
 
-import io.github.lxgaming.bukkitbootstrap.util.Reference;
 import net.minecraft.launchwrapper.Launch;
 
 import java.io.File;
@@ -25,27 +24,23 @@ import java.lang.reflect.Method;
 import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.ArrayList;
-import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
-import java.util.Objects;
 import java.util.Optional;
-import java.util.function.Consumer;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class Main {
     
     public static void main(String[] args) {
-        printInformation(action -> {
-            System.out.println(action);
-        });
+        System.out.println("------------------------------------------------");
+        System.out.println("Launching SpigotMixinBootstrap v1.1.0 by MCMDEV");
+        System.out.println("------------------------------------------------");
         
         List<String> arguments = newArrayList(args);
         loadServerJar(arguments);
-        arguments.add("--tweakClass=org.spongepowered.asm.launch.BukkitBootstrap");
-        System.out.println("Initializing LaunchWrapper...");
+        arguments.add("--tweakClass=org.spongepowered.asm.launch.SpigotMixinBootstrap");
+        System.out.println("[SpigotMixinBootstrap] Initializing LaunchWrapper...");
         Launch.main(arguments.toArray(new String[arguments.size()]));
     }
     
@@ -65,9 +60,9 @@ public class Main {
             Method method = URLClassLoader.class.getDeclaredMethod("addURL", URL.class);
             method.setAccessible(true);
             method.invoke(classLoader, serverJarFile.toURI().toURL());
-            System.out.println("Loaded Server Jar " + serverJarFile.getAbsolutePath());
+            System.out.println("[SpigotMixinBootstrap] Loaded Server Jar " + serverJarFile.getAbsolutePath());
         } catch (Exception ex) {
-            System.out.println("Encountered an error processing BukkitBootstrap::loadServerJar");
+            System.out.println("[SpigotMixinBootstrap] Encountered an error processing BukkitBootstrap::loadServerJar");
             ex.printStackTrace();
             System.exit(1);
         }
@@ -85,18 +80,6 @@ public class Main {
         }
         
         return Optional.empty();
-    }
-    
-    public static void printInformation(Consumer<? super String> consumer) {
-        List<String> information = new ArrayList<String>();
-        information.add(Reference.APP_NAME + " v" + Reference.APP_VERSION);
-        information.add("Authors: " + Reference.AUTHORS);
-        information.add("Source: " + Reference.SOURCE);
-        information.add("Website: " + Reference.WEBSITE);
-        int length = Collections.max(information, Comparator.comparingInt(String::length)).length();
-        information.add(0, String.join("", Collections.nCopies(length, "-")));
-        information.add(String.join("", Collections.nCopies(length, "-")));
-        information.forEach(consumer);
     }
     
     @SafeVarargs

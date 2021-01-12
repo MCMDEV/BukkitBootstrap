@@ -18,18 +18,22 @@ package org.spongepowered.asm.launch;
 
 import net.minecraft.launchwrapper.ITweaker;
 import net.minecraft.launchwrapper.LaunchClassLoader;
+import de.mcmdev.spigotmixinbootstrap.mod.LaunchModLoader;
 
 import java.io.File;
+import java.nio.file.Paths;
 import java.util.List;
 
 /**
  * Modified version of {@link org.spongepowered.asm.launch.MixinTweaker MixinTweaker} in order to launch {@link org.bukkit.craftbukkit.Main Main}.
  */
-public class BukkitBootstrap implements ITweaker {
-    
+public class SpigotMixinBootstrap implements ITweaker {
+
+    private LaunchModLoader launchModLoader;
     private String[] launchArguments;
     
-    public BukkitBootstrap() {
+    public SpigotMixinBootstrap() {
+        this.launchModLoader = new LaunchModLoader(Paths.get("mods/"));
         setLaunchArguments(new String[]{});
         MixinBootstrap.start();
     }
@@ -50,6 +54,9 @@ public class BukkitBootstrap implements ITweaker {
         classLoader.addClassLoaderExclusion("com.mojang.util.QueueLogAppender");
         classLoader.addClassLoaderExclusion("jline.");
         classLoader.addClassLoaderExclusion("org.fusesource.");
+
+        launchModLoader.loadAll(classLoader);
+
         MixinBootstrap.inject();
     }
     

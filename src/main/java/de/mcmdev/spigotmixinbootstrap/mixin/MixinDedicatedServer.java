@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-package io.github.lxgaming.bukkitbootstrap.mixin;
+package de.mcmdev.spigotmixinbootstrap.mixin;
 
-import net.minecraft.server.v1_12_R1.DedicatedServer;
-import org.apache.logging.log4j.LogManager;
+import net.minecraft.server.v1_8_R3.DedicatedServer;
 import org.bukkit.Bukkit;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +29,7 @@ public class MixinDedicatedServer {
     @Inject(method = "init", at = @At("RETURN"))
     private void onInit(CallbackInfoReturnable<Boolean> cir) {
         if (cir.getReturnValue()) {
-            LogManager.getLogger().info(Bukkit.getServer().getName() + " successfully bootstrapped.");
+            System.out.println(Bukkit.getServer().getName() + " successfully bootstrapped.");
         }
     }
 }
